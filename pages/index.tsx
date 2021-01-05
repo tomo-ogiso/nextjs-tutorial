@@ -1,3 +1,4 @@
+import { GetStaticProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import Date from "../components/date";
@@ -6,17 +7,34 @@ import utilStyles from "../styles/utils.module.css";
 import { getSortedPostsData } from "../lib/posts";
 
 // ビルドするタイミングでgetStaticPropsが実行される
-export async function getServerSideProps(context) {
-  console.log(context);
+// export async function getStaticProps() {
+//   const allPostsData = getSortedPostsData();
+//   return {
+//     props: {
+//       allPostsData,
+//     },
+//   };
+// }
+
+export const getStaticProps: GetStaticProps = async () => {
   const allPostsData = getSortedPostsData();
   return {
     props: {
       allPostsData,
     },
   };
-}
+};
 
-export default function Home({ allPostsData }) {
+/* 型定義を別名で取得 */
+type Props = {
+  allPostsData: {
+    id: string;
+    title: string;
+    date: string;
+  }[];
+};
+
+export default function Home({ allPostsData }: Props) {
   return (
     <Layout home>
       <Head>
